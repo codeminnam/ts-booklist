@@ -48,7 +48,7 @@ const Books: React.FC<BooksProps> = ({ books, loading, goAdd, logout }) => {
             dataIndex: 'book',
             key: 'book',
             render: (text, record) => (
-              <Book {...record} key={'{record.bookId}'} />
+              <Book {...record} key={record.bookId} />
             ),
           },
         ]}
