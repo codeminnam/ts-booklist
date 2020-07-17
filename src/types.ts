@@ -13,7 +13,7 @@ export interface BookResType {
   message: string;
   author: string;
   url: string;
-  createAt: string;
+  createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
 }
