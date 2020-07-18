@@ -46,11 +46,6 @@ const reducer = (state: BooksState = initialState, action: BooksAction): BooksSt
   switch (action.type) {
     case GET_BOOKS:
     case ADD_BOOK:
-      return {
-        loading: false,
-        books: null,
-        error: null
-      };
     case DELETE_BOOK:
       return {
         loading: false,
@@ -107,10 +102,11 @@ interface AddSagaAction extends AnyAction {
 function* addBookSaga(action: AddSagaAction) {
   try {
     yield put({ type: PENDING });
-    const book = yield call(BookService.addBook, token, action.payload);
+    yield call(BookService.addBook, token, action.payload);
+    const books = yield call(BookService.getBooks, token);
     yield put({
       type: SUCCESS,
-      payload: book
+      payload: books
     });
   } catch (e) {
     yield put({
