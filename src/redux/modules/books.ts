@@ -1,6 +1,6 @@
 import { BookResType, BookReqType } from '../../types';
 import BookService from '../../services/BookService';
-import { call, takeEvery, put, take } from 'redux-saga/effects';
+import { call, takeEvery, put } from 'redux-saga/effects';
 import { AxiosError } from 'axios';
 import { AnyAction } from 'redux';
 
@@ -22,12 +22,14 @@ const initialState: BooksState = {
 
 const GET_BOOKS = 'my-books/books/GET_BOOKS' as const;
 const ADD_BOOK = 'my-books/books/ADD_BOOK' as const;
+const DELETE_BOOK = 'my-books/books/DELETE_BOOK' as const;
 const PENDING = 'my-books/books/PENDING' as const;
 const SUCCESS = 'my-books/books/SUCCESS' as const;
 const ERROR = 'my-books/books/ERROR' as const;
 
 export const getBooks = () => ({ type: GET_BOOKS });
 export const addBook = (book: BookReqType) => ({ type: ADD_BOOK, payload: book });
+export const deleteBook = (bookId: number) => ({ type: DELETE_BOOK, payload: bookId });
 export const pending = () => ({ type: PENDING });
 export const success = (books: BookResType[]) => ({ type: SUCCESS, payload: books });
 export const error = (e: AxiosError) => ({ type: ERROR, payload: e });
@@ -35,6 +37,7 @@ export const error = (e: AxiosError) => ({ type: ERROR, payload: e });
 type BooksAction =
   | ReturnType<typeof getBooks>
   | ReturnType<typeof addBook>
+  | ReturnType<typeof deleteBook>
   | ReturnType<typeof pending>
   | ReturnType<typeof success>
   | ReturnType<typeof error>;
@@ -48,10 +51,16 @@ const reducer = (state: BooksState = initialState, action: BooksAction): BooksSt
         books: null,
         error: null
       };
+    case DELETE_BOOK:
+      return {
+        loading: false,
+        books: state.books,
+        error: null
+      };
     case PENDING:
       return {
         loading: true,
-        books: null,
+        books: state.books,
         error: null
       };
     case SUCCESS:
@@ -112,7 +121,26 @@ function* addBookSaga(action: AddSagaAction) {
 }
 
 // [project] 책을 삭제하는 saga 함수를 작성했다.
+interface DeleteSagaAction extends AnyAction {
+  payload: number;
+}
 
+function* deleteBookSaga(action: DeleteSagaAction) {
+  try {
+    yield put({ type: PENDING });
+    yield call(BookService.deleteBook, token, action.payload);
+    const books = yield call(BookService.getBooks, token);
+    yield put({
+      type: SUCCESS,
+      payload: books
+    });
+  } catch (e) {
+    yield put({
+      type: ERROR,
+      payload: e
+    })
+  }
+}
 
 // [project] 책을 수정하는 saga 함수를 작성했다.
 
@@ -121,4 +149,5 @@ function* addBookSaga(action: AddSagaAction) {
 export function* sagas() {
   yield takeEvery(GET_BOOKS, getBooksSaga);
   yield takeEvery(ADD_BOOK, addBookSaga);
+  yield takeEvery(DELETE_BOOK, deleteBookSaga);
 }
