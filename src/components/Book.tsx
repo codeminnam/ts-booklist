@@ -3,7 +3,9 @@ import styles from './Book.module.css';
 import { BookResType } from '../types';
 import { BookOutlined, HomeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
-interface BookProps extends BookResType { }
+interface BookProps extends BookResType {
+  deleteBook: (bookId: number) => void;
+}
 
 function formatDate(dateVal: string) {
   const newDate = new Date(dateVal);
@@ -24,7 +26,6 @@ function formatDate(dateVal: string) {
   }
 
   sHour = padValue(sHour);
-  console.log(sMonth, sHour);
   return sMonth + "-" + sDay + "-" + sYear + " " + sHour + ":" + sMinute + " " + sAMPM;
 }
 
@@ -34,7 +35,7 @@ function padValue(value: number) {
 
 // [project] 컨테이너에 작성된 함수를 컴포넌트에서 이용했다.
 // [project] BookResType 의 응답 값을 이용하여, Book 컴포넌트를 완성했다.
-const Book: React.FC<BookProps> = ({ ...record }) => {
+const Book: React.FC<BookProps> = ({ deleteBook, ...record }) => {
   return (
     <div className={styles.book}>
       <div className={styles.title}>
@@ -58,7 +59,10 @@ const Book: React.FC<BookProps> = ({ ...record }) => {
         <button className={`${styles.button_edit} ant-btn ant-btn-circle ant-btn-sm ant-btn-icon-only`} >
           <EditOutlined />
         </button>
-        <button className={`ant-btn ant-btn-primary ant-btn-circle ant-btn-sm ant-btn-icon-only ant-btn-dangerous`}>
+        <button
+          className={`ant-btn ant-btn-primary ant-btn-circle ant-btn-sm ant-btn-icon-only ant-btn-dangerous`}
+          onClick={() => deleteBook(record.bookId)}
+        >
           <DeleteOutlined />
         </button>
       </div>
