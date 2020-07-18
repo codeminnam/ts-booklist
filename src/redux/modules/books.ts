@@ -19,9 +19,9 @@ const initialState: BooksState = {
 
 // [project] redux-action 을 이용하여, books 모듈의 액션 생성 함수와 리듀서를 작성했다.
 
-const GET_BOOKS = 'GET_BOOKS' as const;
-const GET_BOOKS_SUCCESS = 'GET_BOOKS_SUCCESS' as const;
-const GET_BOOKS_ERROR = 'GET_BOOKS_ERROR' as const;
+const GET_BOOKS = 'my-books/books/GET_BOOKS' as const;
+const GET_BOOKS_SUCCESS = 'my-books/books/GET_BOOKS_SUCCESS' as const;
+const GET_BOOKS_ERROR = 'my-books/books/GET_BOOKS_ERROR' as const;
 
 export const getBooks = () => ({ type: GET_BOOKS });
 export const getBooksSuccess = (books: BookResType[]) => ({ type: GET_BOOKS_SUCCESS, payload: books });

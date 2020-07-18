@@ -1,5 +1,4 @@
 import React from 'react';
-
 import styles from './Book.module.css';
 import { BookResType } from '../types';
 import { BookOutlined, HomeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
@@ -8,7 +7,6 @@ interface BookProps extends BookResType { }
 
 function formatDate(dateVal: string) {
   const newDate = new Date(dateVal);
-
   const sMonth = padValue(newDate.getMonth() + 1);
   const sDay = padValue(newDate.getDate());
   const sYear = newDate.getFullYear();
