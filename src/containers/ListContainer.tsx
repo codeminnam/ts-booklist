@@ -26,12 +26,22 @@ const ListContainer: React.FC = () => {
     dispatch(deleteBookSaga(bookId));
   }
 
+  const goEdit = useCallback((bookId: number) => {
+    dispatch(push(`/edit/${bookId}`));
+  }, [dispatch]);
+
   // [project] 컨테이너에서 useDispatch, useSelector, useCallback 을 활용해서 중복없이 비동기 데이터를 보여주도록 처리했다.
   return (
     <>
       {loading && <p style={{ textAlign: 'center' }}>로딩 중..</p>}
       {error && <p style={{ textAlign: 'center' }}>에러 발생!</p>}
-      {books && <List books={books} loading={false} goAdd={goAdd} logout={logout} deleteBook={deleteBook} />}
+      {books && <List
+        books={books}
+        loading={false}
+        goAdd={goAdd}
+        goEdit={goEdit}
+        logout={logout}
+        deleteBook={deleteBook} />}
     </>
   );
 };

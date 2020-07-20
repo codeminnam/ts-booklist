@@ -4,6 +4,7 @@ import { BookResType } from '../types';
 import { BookOutlined, HomeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 interface BookProps extends BookResType {
+  goEdit: (bookId: number) => void;
   deleteBook: (bookId: number) => void;
 }
 
@@ -35,7 +36,7 @@ function padValue(value: number) {
 
 // [project] 컨테이너에 작성된 함수를 컴포넌트에서 이용했다.
 // [project] BookResType 의 응답 값을 이용하여, Book 컴포넌트를 완성했다.
-const Book: React.FC<BookProps> = ({ deleteBook, ...record }) => {
+const Book: React.FC<BookProps> = ({ deleteBook, goEdit, ...record }) => {
   return (
     <div className={styles.book}>
       <div className={styles.title}>
@@ -56,7 +57,10 @@ const Book: React.FC<BookProps> = ({ deleteBook, ...record }) => {
             <HomeOutlined />
           </button>
         </a>
-        <button className={`${styles.button_edit} ant-btn ant-btn-circle ant-btn-sm ant-btn-icon-only`} >
+        <button
+          className={`${styles.button_edit} ant-btn ant-btn-circle ant-btn-sm ant-btn-icon-only`}
+          onClick={() => goEdit(record.bookId)}
+        >
           <EditOutlined />
         </button>
         <button
