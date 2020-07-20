@@ -4,7 +4,7 @@ import { call, takeEvery, put } from 'redux-saga/effects';
 import { AxiosError } from 'axios';
 import { AnyAction } from 'redux';
 
-const token = "d824c0fd-4e07-4e3f-bb31-561b8c5a6636";
+const token = "3485e145-2bfe-44b5-ab61-99ed4194643b";
 
 export interface BooksState {
   books: BookResType[] | null;
@@ -23,6 +23,7 @@ const initialState: BooksState = {
 const GET_BOOKS = 'my-books/books/GET_BOOKS' as const;
 const ADD_BOOK = 'my-books/books/ADD_BOOK' as const;
 const DELETE_BOOK = 'my-books/books/DELETE_BOOK' as const;
+const EDIT_BOOK = 'my-books/books/EDIT_BOOK' as const;
 const PENDING = 'my-books/books/PENDING' as const;
 const SUCCESS = 'my-books/books/SUCCESS' as const;
 const ERROR = 'my-books/books/ERROR' as const;
@@ -30,6 +31,7 @@ const ERROR = 'my-books/books/ERROR' as const;
 export const getBooks = () => ({ type: GET_BOOKS });
 export const addBook = (book: BookReqType) => ({ type: ADD_BOOK, payload: book });
 export const deleteBook = (bookId: number) => ({ type: DELETE_BOOK, payload: bookId });
+export const editBook = (bookId: number, book: BookReqType) => ({ type: EDIT_BOOK, payload: { bookId, book } });
 export const pending = () => ({ type: PENDING });
 export const success = (books: BookResType[]) => ({ type: SUCCESS, payload: books });
 export const error = (e: AxiosError) => ({ type: ERROR, payload: e });
@@ -38,6 +40,7 @@ type BooksAction =
   | ReturnType<typeof getBooks>
   | ReturnType<typeof addBook>
   | ReturnType<typeof deleteBook>
+  | ReturnType<typeof editBook>
   | ReturnType<typeof pending>
   | ReturnType<typeof success>
   | ReturnType<typeof error>;
@@ -47,6 +50,7 @@ const reducer = (state: BooksState = initialState, action: BooksAction): BooksSt
     case GET_BOOKS:
     case ADD_BOOK:
     case DELETE_BOOK:
+    case EDIT_BOOK:
       return {
         loading: false,
         books: state.books,
@@ -139,6 +143,27 @@ function* deleteBookSaga(action: DeleteSagaAction) {
 }
 
 // [project] 책을 수정하는 saga 함수를 작성했다.
+interface EditSagaAction extends AnyAction {
+  bookId: number;
+  book: BookReqType;
+}
+
+function* editBookSaga(action: EditSagaAction) {
+  try {
+    yield put({ type: PENDING });
+    yield call(BookService.editBook, token, action.payload.bookId, action.payload.book);
+    const books = yield call(BookService.getBooks, token);
+    yield put({
+      type: SUCCESS,
+      payload: books
+    });
+  } catch (e) {
+    yield put({
+      type: ERROR,
+      payload: e
+    })
+  }
+}
 
 // [project] saga 함수를 실행하는 액션과 액션 생성 함수를 작성했다.
 
@@ -146,4 +171,5 @@ export function* sagas() {
   yield takeEvery(GET_BOOKS, getBooksSaga);
   yield takeEvery(ADD_BOOK, addBookSaga);
   yield takeEvery(DELETE_BOOK, deleteBookSaga);
+  yield takeEvery(EDIT_BOOK, editBookSaga);
 }
