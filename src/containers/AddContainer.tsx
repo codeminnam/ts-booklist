@@ -6,7 +6,11 @@ import { logout as logoutSaga } from '../redux/modules/auth';
 import { addBook as addBookSaga } from '../redux/modules/books';
 import { BookReqType } from '../types';
 
-const AddContainer = () => {
+interface AddContainerProps {
+  goBack: () => void;
+}
+
+const AddContainer: React.FC<AddContainerProps> = ({ goBack }) => {
   const dispatch = useDispatch();
   const logout = useCallback(() => {
     dispatch(logoutSaga());
@@ -17,7 +21,8 @@ const AddContainer = () => {
   const addBook = ({ title, message, author, url }: BookReqType) => {
     dispatch(addBookSaga({ title, message, author, url }));
   }
-  return <Add loading={false} logout={logout} addBook={addBook} />;
+
+  return <Add loading={false} logout={logout} addBook={addBook} goBack={goBack} />;
 };
 
 export default AddContainer;
