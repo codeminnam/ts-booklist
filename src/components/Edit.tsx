@@ -6,18 +6,18 @@ import { FormOutlined } from '@ant-design/icons';
 import Layout from './Layout';
 import { BookResType, BookReqType } from '../types';
 import styles from './Edit.module.css';
-import { editBook } from '../redux/modules/books';
 
 interface EditProps {
   book: BookResType | undefined | null;
   loading: boolean;
   logout: () => void;
+  goBack: () => void;
   editBook: ({ title, message, author, url }: BookReqType) => void;
 }
 
 // [project] 컨테이너에 작성된 함수를 컴포넌트에서 이용했다.
 // [project] BookResType 의 응답 값을 이용하여, Edit 컴포넌트를 완성했다.
-const Edit: React.FC<EditProps> = ({ book, loading, logout, editBook }) => {
+const Edit: React.FC<EditProps> = ({ book, loading, logout, goBack, editBook }) => {
   const titleRef = useRef<Input>(null);
   const messageRef = useRef<TextArea>(null);
   const authorRef = useRef<Input>(null);
@@ -38,6 +38,7 @@ const Edit: React.FC<EditProps> = ({ book, loading, logout, editBook }) => {
   return (
     <Layout>
       <PageHeader
+        onBack={goBack}
         title={
           <div>
             <FormOutlined /> Edit Book
