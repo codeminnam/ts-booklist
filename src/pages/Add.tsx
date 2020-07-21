@@ -5,7 +5,6 @@ import useToken from '../hooks/useToken';
 import AddContainer from '../containers/AddContainer';
 
 interface HistoryParams {
-  goBack: string;
 }
 
 const Add: React.FC<RouteComponentProps<HistoryParams>> = ({ history }) => {
@@ -18,7 +17,11 @@ const Add: React.FC<RouteComponentProps<HistoryParams>> = ({ history }) => {
     history.goBack();
   }
 
-  return <AddContainer goBack={goBack} />;
+  const goHome = () => {
+    history.push('/');
+  }
+
+  return <AddContainer goBack={goBack} goHome={goHome} />;
 };
 
 export default Add;

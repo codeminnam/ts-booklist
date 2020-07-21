@@ -12,12 +12,13 @@ interface EditProps {
   loading: boolean;
   logout: () => void;
   goBack: () => void;
+  goHome: () => void;
   editBook: ({ title, message, author, url }: BookReqType) => void;
 }
 
 // [project] 컨테이너에 작성된 함수를 컴포넌트에서 이용했다.
 // [project] BookResType 의 응답 값을 이용하여, Edit 컴포넌트를 완성했다.
-const Edit: React.FC<EditProps> = ({ book, loading, logout, goBack, editBook }) => {
+const Edit: React.FC<EditProps> = ({ book, loading, logout, goBack, goHome, editBook }) => {
   const titleRef = useRef<Input>(null);
   const messageRef = useRef<TextArea>(null);
   const authorRef = useRef<Input>(null);
@@ -134,7 +135,12 @@ const Edit: React.FC<EditProps> = ({ book, loading, logout, goBack, editBook }) 
       return;
     }
 
-    editBook({ title, message, author, url });
+    try {
+      editBook({ title, message, author, url });
+    } catch (e) {
+      throw new Error('에러 발생: ' + e);
+    }
+    goHome();
   }
 };
 export default Edit;

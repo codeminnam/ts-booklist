@@ -8,9 +8,10 @@ import { BookReqType } from '../types';
 
 interface AddContainerProps {
   goBack: () => void;
+  goHome: () => void;
 }
 
-const AddContainer: React.FC<AddContainerProps> = ({ goBack }) => {
+const AddContainer: React.FC<AddContainerProps> = ({ goBack, goHome }) => {
   const dispatch = useDispatch();
   const logout = useCallback(() => {
     dispatch(logoutSaga());
@@ -22,7 +23,7 @@ const AddContainer: React.FC<AddContainerProps> = ({ goBack }) => {
     dispatch(addBookSaga({ title, message, author, url }));
   }
 
-  return <Add loading={false} logout={logout} addBook={addBook} goBack={goBack} />;
+  return <Add loading={false} logout={logout} goBack={goBack} goHome={goHome} addBook={addBook} />;
 };
 
 export default AddContainer;

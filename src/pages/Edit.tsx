@@ -7,7 +7,6 @@ import { RouteComponentProps } from 'react-router';
 
 interface Params {
   id: string;
-  goBack: string;
 }
 
 const Edit: React.FC<RouteComponentProps<Params>> = ({ match, history }) => {
@@ -16,11 +15,14 @@ const Edit: React.FC<RouteComponentProps<Params>> = ({ match, history }) => {
   const goBack = () => {
     history.goBack();
   }
+  const goHome = () => {
+    history.push('/');
+  }
 
   if (token === null) {
     return <Redirect to="/signin" />;
   }
-  return <EditContainer bookId={bookId} goBack={goBack} />;
+  return <EditContainer bookId={bookId} goBack={goBack} goHome={goHome} />;
 };
 
 export default Edit;

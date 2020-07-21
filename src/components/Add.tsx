@@ -10,12 +10,13 @@ import { BookReqType } from '../types';
 interface AddProps {
   loading: boolean;
   logout: () => void;
-  addBook: ({ title, message, author, url }: BookReqType) => void;
   goBack: () => void;
+  goHome: () => void;
+  addBook: ({ title, message, author, url }: BookReqType) => void;
 }
 
 // [project] 컨테이너에 작성된 함수를 컴포넌트에서 이용했다.
-const Add: React.FC<AddProps> = ({ loading, logout, addBook, goBack }) => {
+const Add: React.FC<AddProps> = ({ loading, logout, goBack, goHome, addBook }) => {
   const titleRef = React.useRef<Input>(null);
   const messageRef = React.useRef<TextArea>(null);
   const authorRef = React.useRef<Input>(null);
@@ -113,7 +114,12 @@ const Add: React.FC<AddProps> = ({ loading, logout, addBook, goBack }) => {
       return;
     }
 
-    addBook({ title, message, author, url });
+    try {
+      addBook({ title, message, author, url });
+    } catch (e) {
+      throw new Error('에러 발생: ' + e);
+    }
+    goHome();
   }
 };
 export default Add;
