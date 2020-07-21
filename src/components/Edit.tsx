@@ -6,7 +6,6 @@ import { FormOutlined } from '@ant-design/icons';
 import Layout from './Layout';
 import { BookResType, BookReqType } from '../types';
 import styles from './Edit.module.css';
-import { Redirect } from 'react-router-dom';
 
 interface EditProps {
   book: BookResType | undefined | null;
@@ -135,12 +134,7 @@ const Edit: React.FC<EditProps> = ({ book, loading, logout, goBack, editBook }) 
       return;
     }
 
-    try {
-      editBook({ title, message, author, url });
-      return <Redirect to="/" />;
-    } catch (e) {
-      throw new Error('에러 발생: ' + e);
-    }
+    editBook({ title, message, author, url });
   }
 };
 export default Edit;

@@ -6,17 +6,16 @@ import { FormOutlined } from '@ant-design/icons';
 import Layout from './Layout';
 import styles from './Add.module.css';
 import { BookReqType } from '../types';
-import { Redirect } from 'react-router-dom';
 
 interface AddProps {
   loading: boolean;
   logout: () => void;
-  goBack: () => void;
   addBook: ({ title, message, author, url }: BookReqType) => void;
+  goBack: () => void;
 }
 
 // [project] 컨테이너에 작성된 함수를 컴포넌트에서 이용했다.
-const Add: React.FC<AddProps> = ({ loading, logout, goBack, addBook }) => {
+const Add: React.FC<AddProps> = ({ loading, logout, addBook, goBack }) => {
   const titleRef = React.useRef<Input>(null);
   const messageRef = React.useRef<TextArea>(null);
   const authorRef = React.useRef<Input>(null);
@@ -114,12 +113,7 @@ const Add: React.FC<AddProps> = ({ loading, logout, goBack, addBook }) => {
       return;
     }
 
-    try {
-      addBook({ title, message, author, url });
-      return <Redirect to="/" />;
-    } catch (e) {
-      throw new Error('에러 발생: ' + e);
-    }
+    addBook({ title, message, author, url });
   }
 };
 export default Add;
