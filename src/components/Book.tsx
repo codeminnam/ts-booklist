@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './Book.module.css';
 import { BookResType } from '../types';
 import { BookOutlined, HomeOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Tooltip } from 'antd';
 
 interface BookProps extends BookResType {
   goEdit: (bookId: number) => void;
@@ -40,35 +41,41 @@ const Book: React.FC<BookProps> = ({ deleteBook, goEdit, ...record }) => {
   return (
     <div className={styles.book}>
       <div className={styles.title}>
-        <a href="#" className={styles.link_detail_title}>
+        <a href={`/book/${record.bookId}`} className={styles.link_detail_title}>
           <BookOutlined />
           {record.title}
         </a>
       </div>
       <div className={styles.author}>
-        <a href="#" className={styles.link_detail_author}>
+        <a href={`/book/${record.bookId}`} className={styles.link_detail_author}>
           {record.author}
         </a>
       </div>
       <div className={styles.created}>{formatDate(record.createdAt)}</div>
       <div className={styles.tooltips}>
-        <a href="#" className={styles.link_url}>
-          <button type="button" className={`${styles.button_url} ant-btn ant-btn-primary ant-btn-circle ant-btn-sm ant-btn-icon-only`}>
-            <HomeOutlined />
+        <Tooltip title={record.url}>
+          <a href={record.url} className={styles.link_url} target="_blank" rel="noopener noreferrer">
+            <button type="button" className={`${styles.button_url} ant-btn ant-btn-primary ant-btn-circle ant-btn-sm ant-btn-icon-only`}>
+              <HomeOutlined />
+            </button>
+          </a>
+        </Tooltip>
+        <Tooltip title="edit">
+          <button
+            className={`${styles.button_edit} ant-btn ant-btn-circle ant-btn-sm ant-btn-icon-only`}
+            onClick={() => goEdit(record.bookId)}
+          >
+            <EditOutlined />
           </button>
-        </a>
-        <button
-          className={`${styles.button_edit} ant-btn ant-btn-circle ant-btn-sm ant-btn-icon-only`}
-          onClick={() => goEdit(record.bookId)}
-        >
-          <EditOutlined />
-        </button>
-        <button
-          className={`ant-btn ant-btn-primary ant-btn-circle ant-btn-sm ant-btn-icon-only ant-btn-dangerous`}
-          onClick={() => deleteBook(record.bookId)}
-        >
-          <DeleteOutlined />
-        </button>
+        </Tooltip>
+        <Tooltip title="delete">
+          <button
+            className={`ant-btn ant-btn-primary ant-btn-circle ant-btn-sm ant-btn-icon-only ant-btn-dangerous`}
+            onClick={() => deleteBook(record.bookId)}
+          >
+            <DeleteOutlined />
+          </button>
+        </Tooltip>
       </div>
     </div>);
 };
