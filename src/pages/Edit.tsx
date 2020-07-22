@@ -11,7 +11,10 @@ interface Params {
 
 const Edit: React.FC<RouteComponentProps<Params>> = ({ match, history }) => {
   const token = useToken();
-  const bookId = parseInt(match.params.id, 10);
+  if (token === null) {
+    return <Redirect to="/signin" />;
+  }
+
   const goBack = () => {
     history.goBack();
   }
@@ -19,9 +22,8 @@ const Edit: React.FC<RouteComponentProps<Params>> = ({ match, history }) => {
     history.push('/');
   }
 
-  if (token === null) {
-    return <Redirect to="/signin" />;
-  }
+  const bookId = parseInt(match.params.id, 10);
+
   return <EditContainer bookId={bookId} goBack={goBack} goHome={goHome} />;
 };
 

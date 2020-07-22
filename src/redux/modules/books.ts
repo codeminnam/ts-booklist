@@ -19,7 +19,6 @@ const initialState: BooksState = {
 };
 
 // [project] redux-action 을 이용하여, books 모듈의 액션 생성 함수와 리듀서를 작성했다.
-
 const GET_BOOKS = 'my-books/books/GET_BOOKS' as const;
 const ADD_BOOK = 'my-books/books/ADD_BOOK' as const;
 const DELETE_BOOK = 'my-books/books/DELETE_BOOK' as const;
@@ -166,7 +165,6 @@ function* editBookSaga(action: EditSagaAction) {
 }
 
 // [project] saga 함수를 실행하는 액션과 액션 생성 함수를 작성했다.
-
 export function* sagas() {
   yield takeEvery(GET_BOOKS, getBooksSaga);
   yield takeEvery(ADD_BOOK, addBookSaga);
