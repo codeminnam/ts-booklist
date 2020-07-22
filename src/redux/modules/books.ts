@@ -3,8 +3,7 @@ import BookService from '../../services/BookService';
 import { call, takeEvery, put } from 'redux-saga/effects';
 import { AxiosError } from 'axios';
 import { AnyAction } from 'redux';
-
-const token = "3485e145-2bfe-44b5-ab61-99ed4194643b";
+import TokenService from '../../services/TokenService';
 
 export interface BooksState {
   books: BookResType[] | null;
@@ -84,6 +83,7 @@ export default reducer;
 function* getBooksSaga() {
   try {
     yield put({ type: PENDING });
+    const token = yield TokenService.get();
     const books = yield call(BookService.getBooks, token);
     yield put({
       type: SUCCESS,
@@ -105,6 +105,7 @@ interface AddSagaAction extends AnyAction {
 function* addBookSaga(action: AddSagaAction) {
   try {
     yield put({ type: PENDING });
+    const token = yield TokenService.get();
     yield call(BookService.addBook, token, action.payload);
     const books = yield call(BookService.getBooks, token);
     yield put({
@@ -127,6 +128,7 @@ interface DeleteSagaAction extends AnyAction {
 function* deleteBookSaga(action: DeleteSagaAction) {
   try {
     yield put({ type: PENDING });
+    const token = yield TokenService.get();
     yield call(BookService.deleteBook, token, action.payload);
     const books = yield call(BookService.getBooks, token);
     yield put({
@@ -150,6 +152,7 @@ interface EditSagaAction extends AnyAction {
 function* editBookSaga(action: EditSagaAction) {
   try {
     yield put({ type: PENDING });
+    const token = yield TokenService.get();
     yield call(BookService.editBook, token, action.payload.bookId, action.payload.book);
     const books = yield call(BookService.getBooks, token);
     yield put({
