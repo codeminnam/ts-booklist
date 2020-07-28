@@ -28,7 +28,7 @@ function formatDate(dateVal: string) {
   }
 
   sHour = padValue(sHour);
-  return sMonth + "-" + sDay + "-" + sYear + " " + sHour + ":" + sMinute + " " + sAMPM;
+  return `${sMonth}-${sDay}-${sYear} ${sHour}:${sMinute} ${sAMPM}`;
 }
 
 function padValue(value: number) {
@@ -37,24 +37,24 @@ function padValue(value: number) {
 
 // [project] 컨테이너에 작성된 함수를 컴포넌트에서 이용했다.
 // [project] BookResType 의 응답 값을 이용하여, Book 컴포넌트를 완성했다.
-const Book: React.FC<BookProps> = ({ deleteBook, goEdit, ...record }) => {
+const Book: React.FC<BookProps> = ({ deleteBook, goEdit, bookId, title, author, url, createdAt }) => {
   return (
     <div className={styles.book}>
       <div className={styles.title}>
-        <a href={`/book/${record.bookId}`} className={styles.link_detail_title}>
+        <a href={`/book/${bookId}`} className={styles.link_detail_title}>
           <BookOutlined />
-          {record.title}
+          {title}
         </a>
       </div>
       <div className={styles.author}>
-        <a href={`/book/${record.bookId}`} className={styles.link_detail_author}>
-          {record.author}
+        <a href={`/book/${bookId}`} className={styles.link_detail_author}>
+          {author}
         </a>
       </div>
-      <div className={styles.created}>{formatDate(record.createdAt)}</div>
+      <div className={styles.created}>{formatDate(createdAt)}</div>
       <div className={styles.tooltips}>
-        <Tooltip title={record.url}>
-          <a href={record.url} className={styles.link_url} target="_blank" rel="noopener noreferrer">
+        <Tooltip title={url}>
+          <a href={url} className={styles.link_url} target="_blank" rel="noopener noreferrer">
             <button type="button" className={`${styles.button_url} ant-btn ant-btn-primary ant-btn-circle ant-btn-sm ant-btn-icon-only`}>
               <HomeOutlined />
             </button>
@@ -63,7 +63,7 @@ const Book: React.FC<BookProps> = ({ deleteBook, goEdit, ...record }) => {
         <Tooltip title="edit">
           <button
             className={`${styles.button_edit} ant-btn ant-btn-circle ant-btn-sm ant-btn-icon-only`}
-            onClick={() => goEdit(record.bookId)}
+            onClick={() => goEdit(bookId)}
           >
             <EditOutlined />
           </button>
@@ -71,7 +71,7 @@ const Book: React.FC<BookProps> = ({ deleteBook, goEdit, ...record }) => {
         <Tooltip title="delete">
           <button
             className={`ant-btn ant-btn-primary ant-btn-circle ant-btn-sm ant-btn-icon-only ant-btn-dangerous`}
-            onClick={() => deleteBook(record.bookId)}
+            onClick={() => deleteBook(bookId)}
           >
             <DeleteOutlined />
           </button>

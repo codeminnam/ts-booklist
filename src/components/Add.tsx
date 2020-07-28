@@ -12,7 +12,7 @@ interface AddProps {
   logout: () => void;
   goBack: () => void;
   goHome: () => void;
-  addBook: ({ title, message, author, url }: BookReqType) => void;
+  addBook: (book: BookReqType) => void;
 }
 
 // [project] 컨테이너에 작성된 함수를 컴포넌트에서 이용했다.

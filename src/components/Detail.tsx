@@ -12,7 +12,7 @@ interface DetailProps {
   book: BookResType | null | undefined;
   logout: () => void;
   goBack: () => void;
-  goEdit: (bookId: number | undefined) => void;
+  goEdit: (bookId?: number) => void;
 }
 
 // [project] 컨테이너에 작성된 함수를 컴포넌트에서 이용했다.
