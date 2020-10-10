@@ -18,13 +18,10 @@ const Edit: React.FC<RouteComponentProps<Params>> = ({ match, history }) => {
   const goBack = () => {
     history.goBack();
   }
-  const goHome = () => {
-    history.push('/');
-  }
 
   const bookId = parseInt(match.params.id, 10);
 
-  return <EditContainer bookId={bookId} goBack={goBack} goHome={goHome} />;
+  return <EditContainer bookId={bookId} goBack={goBack} />;
 };
 
 export default Edit;

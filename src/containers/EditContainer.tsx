@@ -10,10 +10,9 @@ import { BookReqType } from '../types';
 interface EditContainerProps {
   bookId: number
   goBack: () => void;
-  goHome: () => void;
 }
 
-const EditContainer: React.FC<EditContainerProps> = ({ bookId, goBack, goHome }) => {
+const EditContainer: React.FC<EditContainerProps> = ({ bookId, goBack }) => {
   const { books } = useSelector((state: RootState) => state.books);
   const dispatch = useDispatch();
   const logout = useCallback(() => {
@@ -33,7 +32,7 @@ const EditContainer: React.FC<EditContainerProps> = ({ bookId, goBack, goHome })
   // [project] 컨테이너에서 useDispatch, useSelector, useCallback 을 활용해서 중복없이 비동기 데이터를 보여주도록 처리했다.
   // [project] Edit 나 Detail 컴포넌트에서 새로고침 시, 리스트가 없는 경우, 리스트를 받아오도록 처리했다.
 
-  return <Edit book={book} loading={false} logout={logout} goBack={goBack} goHome={goHome} editBook={editBook} />;
+  return <Edit book={book} loading={false} logout={logout} goBack={goBack} editBook={editBook} />;
 };
 
 export default EditContainer;

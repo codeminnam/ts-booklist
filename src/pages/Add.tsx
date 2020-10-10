@@ -17,11 +17,7 @@ const Add: React.FC<RouteComponentProps<HistoryParams>> = ({ history }) => {
     history.goBack();
   }
 
-  const goHome = () => {
-    history.push('/');
-  }
-
-  return <AddContainer goBack={goBack} goHome={goHome} />;
+  return <AddContainer goBack={goBack} />;
 };
 
 export default Add;

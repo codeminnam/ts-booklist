@@ -11,12 +11,11 @@ interface AddProps {
   loading: boolean;
   logout: () => void;
   goBack: () => void;
-  goHome: () => void;
   addBook: (book: BookReqType) => void;
 }
 
 // [project] 컨테이너에 작성된 함수를 컴포넌트에서 이용했다.
-const Add: React.FC<AddProps> = ({ loading, logout, goBack, goHome, addBook }) => {
+const Add: React.FC<AddProps> = ({ loading, logout, goBack, addBook }) => {
   const titleRef = React.useRef<Input>(null);
   const messageRef = React.useRef<TextArea>(null);
   const authorRef = React.useRef<Input>(null);
@@ -119,7 +118,6 @@ const Add: React.FC<AddProps> = ({ loading, logout, goBack, goHome, addBook }) =
     } catch (e) {
       throw new Error('에러 발생: ' + e);
     }
-    goHome();
   }
 };
 export default Add;
