@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { PageHeader, Button, Input } from 'antd';
 import { BookOutlined } from '@ant-design/icons';
 
@@ -10,14 +10,26 @@ const { TextArea } = Input;
 
 interface DetailProps {
   book: BookResType | null | undefined;
-  logout: () => void;
-  goBack: () => void;
+  error: Error | null;
+  getBooks: () => void;
   goEdit: (bookId?: number) => void;
+  goBack: () => void;
+  logout: () => void;
 }
 
 // [project] 컨테이너에 작성된 함수를 컴포넌트에서 이용했다.
 // [project] BookResType 의 응답 값을 이용하여, Detail 컴포넌트를 완성했다.
-const Detail: React.FC<DetailProps> = ({ book, logout, goBack, goEdit }) => {
+const Detail: React.FC<DetailProps> = ({ book, error, getBooks, goEdit, goBack, logout }) => {
+  useEffect(() => {
+    getBooks();
+  }, [getBooks]);
+
+  useEffect(() => {
+    if (error) {
+      logout();
+    }
+  }, [error, logout]);
+
   if (book === null) {
     return null;
   }
