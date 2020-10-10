@@ -1,9 +1,9 @@
 # Booklist website (react / typescript)
 
 ## Project summary
-This is a website that you can manage book information.
-You can add/edit/delete/view book info in this website.
-It's mainly built with react, typescript, and redux-saga.
+This is a website that you can manage book information.  
+You can add/edit/delete/view book info in this website.  
+It's mainly built with react, typescript, and redux-saga.  
 
 ## Setting up the project
 ```
