@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Table, PageHeader, Button } from 'antd';
 
 import styles from './List.module.css';
@@ -8,16 +8,37 @@ import { BookResType } from '../types';
 
 interface BooksProps {
   books: BookResType[] | null;
+  error: Error | null;
   loading: boolean;
+  getBooks: () => void;
+  deleteBook: (bookId: number) => void;
   goAdd: () => void;
   goEdit: (bookId: number) => void;
   logout: () => void;
-  deleteBook: (bookId: number) => void;
 }
 
 // [project] 컨테이너에 작성된 함수를 컴포넌트에서 이용했다.
 // [project] BookResType 의 응답 값을 이용하여, List 컴포넌트의 키를 처리했다.
-const Books: React.FC<BooksProps> = ({ books, loading, goAdd, goEdit, logout, deleteBook }) => {
+const Books: React.FC<BooksProps> = ({
+  books,
+  loading,
+  error,
+  getBooks,
+  deleteBook,
+  goAdd,
+  goEdit,
+  logout
+}) => {
+  useEffect(() => {
+    getBooks();
+  }, [getBooks]);
+
+  useEffect(() => {
+    if (error) {
+      logout();
+    }
+  }, [error, logout]);
+
   return (
     <Layout>
       <PageHeader

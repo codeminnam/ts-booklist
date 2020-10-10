@@ -1,26 +1,43 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { message as messageDialog, PageHeader, Input, Button } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import { FormOutlined } from '@ant-design/icons';
 
 import Layout from './Layout';
 import styles from './Add.module.css';
-import { BookReqType } from '../types';
+import { BookReqType, BookResType } from '../types';
 
 interface AddProps {
+  books: BookResType[] | null;
   loading: boolean;
+  error: Error | null;
+  getBooks: () => void;
+  addBook: (book: BookReqType) => void;
   logout: () => void;
   goBack: () => void;
-  goHome: () => void;
-  addBook: (book: BookReqType) => void;
 }
 
 // [project] 컨테이너에 작성된 함수를 컴포넌트에서 이용했다.
-const Add: React.FC<AddProps> = ({ loading, logout, goBack, goHome, addBook }) => {
+const Add: React.FC<AddProps> = ({ books, loading, error, getBooks, addBook, logout, goBack }) => {
   const titleRef = React.useRef<Input>(null);
   const messageRef = React.useRef<TextArea>(null);
   const authorRef = React.useRef<Input>(null);
   const urlRef = React.useRef<Input>(null);
+
+  useEffect(() => {
+    getBooks();
+  }, [getBooks]);
+
+  useEffect(() => {
+    if (error) {
+      logout();
+    }
+  }, [error, logout]);
+
+  if (books === null) {
+    return null;
+  }
+
 
   return (
     <Layout>
@@ -119,7 +136,6 @@ const Add: React.FC<AddProps> = ({ loading, logout, goBack, goHome, addBook }) =
     } catch (e) {
       throw new Error('에러 발생: ' + e);
     }
-    goHome();
   }
 };
 export default Add;

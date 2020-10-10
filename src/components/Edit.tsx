@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { message as messageDialog, PageHeader, Input, Button } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import { FormOutlined } from '@ant-design/icons';
@@ -10,28 +10,39 @@ import styles from './Edit.module.css';
 interface EditProps {
   book: BookResType | undefined | null;
   loading: boolean;
-  logout: () => void;
+  error: Error | null;
+  getBooks: () => void;
+  editBook: (book: BookReqType) => void;
   goBack: () => void;
-  goHome: () => void;
-  editBook: ({ title, message, author, url }: BookReqType) => void;
+  logout: () => void;
 }
 
 // [project] 컨테이너에 작성된 함수를 컴포넌트에서 이용했다.
 // [project] BookResType 의 응답 값을 이용하여, Edit 컴포넌트를 완성했다.
-const Edit: React.FC<EditProps> = ({ book, loading, logout, goBack, goHome, editBook }) => {
+const Edit: React.FC<EditProps> = ({ book, loading, error, getBooks, editBook, goBack, logout }) => {
   const titleRef = useRef<Input>(null);
   const messageRef = useRef<TextArea>(null);
   const authorRef = useRef<Input>(null);
   const urlRef = useRef<Input>(null);
 
+  useEffect(() => {
+    getBooks();
+  }, [getBooks]);
+
+  useEffect(() => {
+    if (error) {
+      logout();
+    }
+  }, [error, logout]);
+
   if (book === null) {
-    return <div>Null</div>;
+    return null;
   }
 
   if (book === undefined) {
     return (
       <div>
-        <h1>Not Found Book</h1>
+        <h1>NotFound Book</h1>
       </div>
     );
   }
@@ -140,7 +151,6 @@ const Edit: React.FC<EditProps> = ({ book, loading, logout, goBack, goHome, edit
     } catch (e) {
       throw new Error('에러 발생: ' + e);
     }
-    goHome();
   }
 };
 export default Edit;

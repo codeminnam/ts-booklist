@@ -1,9 +1,10 @@
 import { BookResType, BookReqType } from '../../types';
 import BookService from '../../services/BookService';
-import { call, takeEvery, put } from 'redux-saga/effects';
+import { call, takeEvery, put, select } from 'redux-saga/effects';
 import { AxiosError } from 'axios';
 import { AnyAction } from 'redux';
-import TokenService from '../../services/TokenService';
+import { getBooksFromState, getTokenFromState } from '../utils';
+import { push } from 'connected-react-router';
 
 export interface BooksState {
   books: BookResType[] | null;
@@ -27,7 +28,7 @@ const SUCCESS = 'my-books/books/SUCCESS' as const;
 const ERROR = 'my-books/books/ERROR' as const;
 
 export const getBooks = () => ({ type: GET_BOOKS });
-export const addBook = (book: BookReqType) => ({ type: ADD_BOOK, payload: book });
+export const addBook = (book: BookReqType) => ({ type: ADD_BOOK, payload: { book } });
 export const deleteBook = (bookId: number) => ({ type: DELETE_BOOK, payload: bookId });
 export const editBook = (bookId: number, book: BookReqType) => ({ type: EDIT_BOOK, payload: { bookId, book } });
 export const pending = () => ({ type: PENDING });
@@ -83,8 +84,8 @@ export default reducer;
 function* getBooksSaga() {
   try {
     yield put({ type: PENDING });
-    const token = yield TokenService.get();
-    const books = yield call(BookService.getBooks, token);
+    const token: string = yield select((state) => state.auth.token);
+    const books: BookResType[] = yield call(BookService.getBooks, token);
     yield put({
       type: SUCCESS,
       payload: books
@@ -99,19 +100,27 @@ function* getBooksSaga() {
 
 // [project] 책을 추가하는 saga 함수를 작성했다.
 interface AddSagaAction extends AnyAction {
-  payload: BookReqType;
+  payload: {
+    book: BookReqType
+  };
 }
 
 function* addBookSaga(action: AddSagaAction) {
   try {
     yield put({ type: PENDING });
-    const token = yield TokenService.get();
-    yield call(BookService.addBook, token, action.payload);
-    const books = yield call(BookService.getBooks, token);
+    const token: string = yield select(getTokenFromState);
+    const book: BookResType = yield call(
+      BookService.addBook,
+      token,
+      action.payload.book
+    );
+    console.log(book);
+    const books: BookResType[] = yield select(getBooksFromState);
     yield put({
       type: SUCCESS,
-      payload: books
+      payload: [...books, book]
     });
+    yield put(push('/'));
   } catch (e) {
     yield put({
       type: ERROR,
@@ -122,18 +131,20 @@ function* addBookSaga(action: AddSagaAction) {
 
 // [project] 책을 삭제하는 saga 함수를 작성했다.
 interface DeleteSagaAction extends AnyAction {
-  payload: number;
+  payload: {
+    bookId: number;
+  };
 }
 
 function* deleteBookSaga(action: DeleteSagaAction) {
   try {
     yield put({ type: PENDING });
-    const token = yield TokenService.get();
-    yield call(BookService.deleteBook, token, action.payload);
-    const books = yield call(BookService.getBooks, token);
+    const token: string = yield select(getTokenFromState);
+    yield call(BookService.deleteBook, token, action.payload.bookId);
+    const books: BookResType[] = yield select(getBooksFromState);
     yield put({
       type: SUCCESS,
-      payload: books
+      payload: books.filter((book) => book.bookId !== action.payload.bookId)
     });
   } catch (e) {
     yield put({
@@ -145,20 +156,27 @@ function* deleteBookSaga(action: DeleteSagaAction) {
 
 // [project] 책을 수정하는 saga 함수를 작성했다.
 interface EditSagaAction extends AnyAction {
-  bookId: number;
-  book: BookReqType;
+  payload: {
+    bookId: number;
+    book: BookReqType;
+  }
 }
 
 function* editBookSaga(action: EditSagaAction) {
   try {
     yield put({ type: PENDING });
-    const token = yield TokenService.get();
-    yield call(BookService.editBook, token, action.payload.bookId, action.payload.book);
-    const books = yield call(BookService.getBooks, token);
+    const token: string = yield select(getTokenFromState);
+    const newBook = yield call(
+      BookService.editBook,
+      token, action.payload.bookId,
+      action.payload.book
+    );
+    const books: BookResType[] = yield select(getBooksFromState);
     yield put({
       type: SUCCESS,
-      payload: books
+      payload: books.map((book) => (book.bookId === newBook.bookId ? newBook : book))
     });
+    yield put(push('/'));
   } catch (e) {
     yield put({
       type: ERROR,
