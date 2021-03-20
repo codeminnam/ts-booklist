@@ -42,13 +42,13 @@ const Signin: React.FC<SigninProps> = ({ loading, login, error }) => {
               />
             </Col>
             <Col span={12}>
-              <div className={styles.signin_title}>My Books</div>
+              <div className={styles.signin_title}>TS-Booklist</div>
               <div className={styles.signin_subtitle}>
                 Please Note Your Opinion
               </div>
               <div className={styles.signin_underline} />
               <div className={styles.email_title}>
-                Email
+                Email: code.minnam@gmail.com
                 <span className={styles.required}> *</span>
               </div>
               <div className={styles.input_area}>
@@ -61,7 +61,7 @@ const Signin: React.FC<SigninProps> = ({ loading, login, error }) => {
                 />
               </div>
               <div className={styles.password_title}>
-                Password
+                Password: bdreact1
                 <span className={styles.required}> *</span>
               </div>
               <div className={styles.input_area}>
